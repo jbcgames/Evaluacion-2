@@ -109,9 +109,10 @@ const searchButtonEvolution = document.querySelector(".buttonEvolution");
   searchButton.addEventListener("click", () => {
     
     const textName = document.querySelector(".containerFinder input");
-    console.log(apiUrlNombrePokemon + textName.value)
-    datos_iniciales(textName.value)
-    descripciones(textName.value)
+    const textNam= textName.value
+    console.log(apiUrlNombrePokemon + textNam.toLowerCase() )
+    datos_iniciales(textNam.toLowerCase() )
+    descripciones(textNam.toLowerCase() )
 
 
   })
