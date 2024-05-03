@@ -1,6 +1,7 @@
 const apiUrlNombrePokemon = "https://pokeapi.co/api/v2/pokemon/";
 const apiUrlEspecie = "https://pokeapi.co/api/v2/pokemon-species/";
 const apiUrlCadena = "https://pokeapi.co/api/v2/evolution-chain/";
+let actual_name;
 async function consultarApiPokemon(url) {
     try {
       const response = await axios.get(url);
@@ -11,6 +12,8 @@ async function consultarApiPokemon(url) {
       Container.style.display="none";
       const eContainer = document.querySelector(".containerError")
       eContainer.style.display="block";
+      const qContainer = document.querySelector(".containerEvolution")
+        qContainer.style.display="None";
     }
   }
   async function datos_iniciales(name){
@@ -65,29 +68,44 @@ async function consultarApiPokemon(url) {
 
       Description.innerHTML= flavorTextEs;
   
-      evolucion(response.evolution_chain.url)
+      evolucion(response.evolution_chain.url, name)
     })
   }
-  const searchButton = document.querySelector(".buttonSearch");
+  
 
-  async function evolucion(name){
-    const infoPokemon = consultarApiPokemon(name)
-   .then((response) => {
+  async function evolucion(url, name){
+    const infoPokemon = consultarApiPokemon(url)
+    .then((response) => {
     const idEvolution= response.chain;
-    findName(idEvolution, )
-
+    const a= findName(idEvolution, name)
+    .then((response) => {
+      if(response!=null){
+        const Container = document.querySelector(".containerEvolution")
+        Container.style.display="block";
+        actual_name=response;
+      }else{
+        const Container = document.querySelector(".containerEvolution")
+        Container.style.display="None";
+      }
+      console.log(response)
+    })
     })
   }
   async function findName(idEvolution, name) {
-    if (idEvolution.species.name === name) {
+    try{if (idEvolution.species.name === name) {
         return idEvolution.evolves_to[0].species.name;
     } else if (idEvolution.evolves_to[0]) {
         return findName(idEvolution.evolves_to[0], name);
     } else {
         return null;
+    }}
+    catch{
+      console.error("No tiene evolucion")
+      actual_name=null;
     }
 }
-
+const searchButton = document.querySelector(".buttonSearch");
+const searchButtonEvolution = document.querySelector(".buttonEvolution");
   searchButton.addEventListener("click", () => {
     
     const textName = document.querySelector(".containerFinder input");
@@ -95,10 +113,14 @@ async function consultarApiPokemon(url) {
     datos_iniciales(textName.value)
     descripciones(textName.value)
 
-    //Name.innerHTML = nombre;
-    //
 
-     
-
+  })
+  
+  searchButtonEvolution.addEventListener("click", () => {
     
+    console.log(apiUrlNombrePokemon + actual_name)
+    datos_iniciales(actual_name)
+    descripciones(actual_name)
+
+
   })
