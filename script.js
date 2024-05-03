@@ -110,9 +110,10 @@ const searchButtonEvolution = document.querySelector(".buttonEvolution");
     
     const textName = document.querySelector(".containerFinder input");
     const textNam= textName.value
-    console.log(apiUrlNombrePokemon + textNam.toLowerCase() )
-    datos_iniciales(textNam.toLowerCase() )
-    descripciones(textNam.toLowerCase() )
+    
+    console.log(apiUrlNombrePokemon + textNam.toLowerCase().replace(/\d/g, '') )
+    datos_iniciales(textNam.toLowerCase().replace(/\d/g, ''))
+    descripciones(textNam.toLowerCase().replace(/\d/g, '') )
 
 
   })
